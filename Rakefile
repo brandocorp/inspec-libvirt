@@ -1,5 +1,6 @@
 #!/usr/bin/env rake
 
+require 'bundler/gem_tasks'
 require 'rake/testtask'
 require 'rubocop/rake_task'
 
@@ -9,12 +10,12 @@ tf_vars    = 'terraform.tfvars'
 tf_plan    = 'tf.plan'
 
 verify_command = %Q(
-  bundle exec inspec exec %s/verify --attrs %s/verify/%s -t qemu://; 
-  rc=$?; 
-  if [ $rc -eq 0 ] || [ $rc -eq 101 ]; then 
-    exit 0; 
-  else 
-    exit 1; 
+  bundle exec inspec exec %s/verify --attrs %s/verify/%s -t libvirt://;
+  rc=$?;
+  if [ $rc -eq 0 ] || [ $rc -eq 101 ]; then
+    exit 0;
+  else
+    exit 1;
   fi
 )
 
@@ -73,7 +74,7 @@ namespace :test do
     cmd = format(init_command, fixtures)
     sh(cmd)
   end
-  
+
   desc 'Terraform plan'
   task :plan do
     cmd = format(plan_command, fixtures, tf_vars, tf_plan)
@@ -85,7 +86,7 @@ namespace :test do
     cmd = format(apply_command, fixtures, tf_plan)
     sh(cmd)
   end
-  
+
   desc 'Terraform destroy'
   task :destroy do
     cmd = format(destroy_command, fixtures, tf_vars)
@@ -95,11 +96,11 @@ end
 
 desc "Perform Integration Tests"
 task :integration do
-  Rake::Task["tf:init"].execute
-  Rake::Task["tf:plan"].execute
-  Rake::Task["tf:apply"].execute
-  Rake::Task["tf:verify"].execute
-  Rake::Task["tf:destroy"].execute
+  Rake::Task["test:init"].execute
+  Rake::Task["test:plan"].execute
+  Rake::Task["test:apply"].execute
+  Rake::Task["test:verify"].execute
+  Rake::Task["test:destroy"].execute
 end
 
 begin

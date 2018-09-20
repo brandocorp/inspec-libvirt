@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'fog-libvirt', '~> 0.5.0'
   gem.add_dependency 'inspec', '~> 2.2', '>= 2.2.70'
+  gem.add_dependency 'train', '~> 1.4'
 
   gem.add_development_dependency 'rspec',     '~> 3.2'
   gem.add_development_dependency 'simplecov', '~> 0.7'

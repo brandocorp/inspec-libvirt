@@ -2,7 +2,7 @@ class Libvirtdomain < Inspec.resource(1)
   name 'libvirt_domain'
   desc 'Verifies settings for a Libvirt domain.'
 
-  supports platform: 'unix'
+  supports platform: 'libvirt'
 
   example <<-RUBY
     describe libvirt_domain(name:'ubuntu-16.04') do
@@ -23,6 +23,10 @@ class Libvirtdomain < Inspec.resource(1)
     domain.active
   end
 
+  def persistent?
+    domain.persistent
+  end
+
   def arch
     domain.arch
   end
@@ -36,7 +40,7 @@ class Libvirtdomain < Inspec.resource(1)
   end
 
   def exists?
-    domain
+    domain && domain.is_a?(Fog::Compute::Libvirt::Server)
   end
 
   def memory
@@ -59,8 +63,6 @@ class Libvirtdomain < Inspec.resource(1)
     domain.state
   end
 
-
-
   private
 
   def domain
@@ -68,6 +70,6 @@ class Libvirtdomain < Inspec.resource(1)
   end
 
   def domain_for(name, pool)
-    client.domains.all(name: name, pool_name: pool)
+    client.servers.all(name: name, pool_name: pool).first
   end
 end

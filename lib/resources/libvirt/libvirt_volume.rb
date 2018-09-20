@@ -2,7 +2,7 @@ class LibvirtVolume < Inspec.resource(1)
   name 'libvirt_volume'
   desc 'Verifies settings for a Libvirt volume.'
 
-  supports platform: 'unix'
+  supports platform: 'libvirt'
 
   example <<-RUBY
     describe libvirt_volume(name:'ubuntu-16.04.img', pool: 'default') do
